@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.ajitsing:sherlock:1.0.4@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/ccfcf8135d9f4bb38bcbf90ccd9e726e/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/ccfcf8135d9f4bb38bcbf90ccd9e726e/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.ajitsing/sherlock/1.0.4/d670a3a6b6e6754017504bdd326bf161d1ada73b/sherlock-1.0.4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
