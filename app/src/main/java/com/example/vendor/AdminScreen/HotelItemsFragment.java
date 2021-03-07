@@ -46,13 +46,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.ml.common.modeldownload.FirebaseModelDownloadConditions;
-import com.google.firebase.ml.naturallanguage.FirebaseNaturalLanguage;
-import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslateLanguage;
-import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslator;
-import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslatorOptions;
+
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
+
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -150,6 +150,9 @@ public class HotelItemsFragment extends Fragment {
             btn_datepicker = view.findViewById(R.id.btn_hotel_items_date_picker);
             txt_date = view.findViewById(R.id.txt_hotel_item_date);
 
+
+            System.setProperty("org.apache.poi.javax.xml.stream.XMLOutputFactory", "com.fasterxml.aalto.stax.OutputFactoryImpl");
+            System.setProperty("org.apache.poi.javax.xml.stream.XMLEventFactory", "com.fasterxml.aalto.stax.EventFactoryImpl");
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MMM.dd");
             currentDate = sdf.format(new Date());// 12.06.1999
@@ -290,13 +293,11 @@ public class HotelItemsFragment extends Fragment {
                                 public void onListCallBack(List<String> itemDataList) { //"samraj","76kg", "gyfhfd","89kg"
                                     Log.v("data", "" + itemDataList);
 
-                                    FileWriter fileWriter = null;
-                                    try {
-                                        fileWriter = new FileWriter(file);
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                    final CSVWriter writer = new CSVWriter(fileWriter);
+
+
+
+
+
 
                                     String[] list1 = new String[0];
                                     ArrayList<String> spaceHotel = new ArrayList<>();
@@ -436,6 +437,7 @@ public class HotelItemsFragment extends Fragment {
 
 
 
+
                                             Log.v("orderKey", "" + key);
 
                                             orderContent.child(keys).child(key).addValueEventListener(new ValueEventListener() {
@@ -444,13 +446,26 @@ public class HotelItemsFragment extends Fragment {
                                                     totalSummary.clear();
                                                     for (final DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
+                                                        String itemMarathi = "";
 
-                                                        final String itemName = dataSnapshot.child("itemName").getValue().toString();
-                                                        final double[] itemQuantity = {Double.parseDouble(dataSnapshot.child("itemQuantity").getValue().toString())};
-                                                        final String itemUnit = dataSnapshot.child("itemUnit").getValue().toString();
+                                                            final String itemName = dataSnapshot.child("itemName").getValue().toString();
+                                                            final double[] itemQuantity = {Double.parseDouble(dataSnapshot.child("itemQuantity").getValue().toString())};
+                                                            final String itemUnit = dataSnapshot.child("itemUnit").getValue().toString();
 
+                                                        try {
+                                                            itemMarathi = dataSnapshot.child("itemNameInMarathi").getValue().toString();
+                                                        }catch (Exception e){
+                                                            Log.v("Exception",""+e.getMessage());
+                                                        }
+
+
+
+
+                                                        HashMap<String,Object> productDetail = new HashMap<>();
+                                                        productDetail.put("itemName",itemName);
+                                                        productDetail.put("marathi_name",itemMarathi);
                                                         Hotel.child(keys).child("hotelName").setValue(keys);
-                                                        mProductPurchase.child(itemName).child("itemName").setValue(itemName);
+                                                        mProductPurchase.child(itemName).updateChildren(productDetail);
 
 
                                                         try {
@@ -566,77 +581,9 @@ public class HotelItemsFragment extends Fragment {
             dbRef.addValueEventListener(valueEventListener);
 
 
-            // Create an English-German translator:
-
-            final String[] marathi_name = new String[1];
-            FirebaseTranslatorOptions firebaseTranslatorOptions = new FirebaseTranslatorOptions.Builder()
-                    .setSourceLanguage(FirebaseTranslateLanguage.EN)
-                    .setTargetLanguage(FirebaseTranslateLanguage.MR)
-                    .build();
-
-            final FirebaseTranslator firebaseTranslator = FirebaseNaturalLanguage.getInstance().getTranslator(firebaseTranslatorOptions);
-
-            final FirebaseModelDownloadConditions firebaseModelDownloadConditions = new FirebaseModelDownloadConditions.Builder().build();
-
-            mProductPurchase.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    try {
-                        if(snapshot.hasChildren()){
-                            for (DataSnapshot ds : snapshot.getChildren()){
-                                final String itemName = ds.child("itemName").getValue().toString();
-                                firebaseTranslator.downloadModelIfNeeded(firebaseModelDownloadConditions)
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-
-                                                firebaseTranslator.translate(itemName)
-                                                        .addOnSuccessListener(new OnSuccessListener<String>() {
-                                                            @Override
-                                                            public void onSuccess(String s) {
-                                                                HashMap<String, Object> hotelData = new HashMap<>();
-                                                                marathi_name[0] = s;
-
-                                                                hotelData.put("itemName", itemName);
-                                                                hotelData.put("marathi_name", marathi_name[0]);
-
-                                                                mProductPurchase.child(itemName).updateChildren(hotelData);
 
 
-                                                            }
-                                                        })
-                                                        .addOnFailureListener(new OnFailureListener() {
-                                                            @Override
-                                                            public void onFailure(@NonNull Exception e) {
-                                                            }
-                                                        });
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                HashMap<String, Object> hotelData = new HashMap<>();
-                                                hotelData.put("itemName", itemName);
-                                                hotelData.put("marathi_name", marathi_name[0]);
 
-                                                mProductPurchase.child(itemName).updateChildren(hotelData);
-
-
-                                            }
-                                        });
-                            }
-                        }
-                    }catch (Exception e){
-                        e.getMessage();
-                    }
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
 
 
 
@@ -685,18 +632,23 @@ public class HotelItemsFragment extends Fragment {
 
                                         for (DataSnapshot ds : snapshot.getChildren()) {
                                             Log.v("itemKey", "" + ds.getKey());
-                                            String quant = ds.child("itemQuantity").getValue().toString();
-                                            String unit = ds.child("itemUnit").getValue().toString();
-                                            Log.v("jgig", "" + items + ds.getKey() + quant + unit);
+                                            try {
+                                                String quant = ds.child("itemQuantity").getValue().toString();
+                                                String unit = ds.child("itemUnit").getValue().toString();
+                                                Log.v("jgig", "" + items + ds.getKey() + quant + unit);
 
-                                            itemQuantityList.add(items);
-                                            itemQuantityList.add(ds.getKey());
-                                            itemQuantityList.add(quant + unit);
+                                                itemQuantityList.add(items);
+                                                itemQuantityList.add(ds.getKey());
+                                                itemQuantityList.add(quant + unit);
 
 
-                                            //Toast.makeText(Vendor.getAppContext(), "HotelData " + list.get(finalJ) + quant + unit, Toast.LENGTH_SHORT).show();
+                                                //Toast.makeText(Vendor.getAppContext(), "HotelData " + list.get(finalJ) + quant + unit, Toast.LENGTH_SHORT).show();
 
-                                            Log.v("itemdetails", "" + itemQuantityList.toString());
+                                                Log.v("itemdetails", "" + itemQuantityList.toString());
+                                            }catch (Exception e){
+                                                e.printStackTrace();
+                                            }
+
 
                                         }
 
@@ -742,16 +694,21 @@ public class HotelItemsFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.hasChildren()) {
-                    for (DataSnapshot ds : snapshot.getChildren()) {
-                        String dataItem = ds.getKey();
-                        String marathi_name = ds.child("marathi_name").getValue().toString();
-                        if (!itemList.contains(dataItem)) {
-                            itemList.add(dataItem);
-                            itemList.add(marathi_name);
+                    try {
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            String dataItem = ds.getKey();
+                            String marathi_name = ds.child("marathi_name").getValue().toString();
+                            if (!itemList.contains(dataItem)) {
+                                itemList.add(dataItem);
+                                itemList.add(marathi_name);
+                            }
+
+
                         }
-
-
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
+
                     firebaseListCallback.onListCallBack(itemList);
                 }
             }

@@ -91,6 +91,7 @@ public class AdminViewHotelOrderFragment extends Fragment {
     DatabaseReference mOrderContent, mOrder, mUserID, mShopUid;
     Button btn_completed_change;
     String key, shopUid, total;
+    String address;
 
     Button btn_invoice_print;
 
@@ -159,7 +160,24 @@ public class AdminViewHotelOrderFragment extends Fragment {
                     if (snapshot.hasChildren()) {
                         for (DataSnapshot ds : snapshot.getChildren()) {
                             key = ds.getKey();
+                            mUserID.child(key).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if(snapshot.hasChildren()){
+                                        try {
+                                            address = snapshot.child("UserAddress").getValue().toString();
+                                        }catch (Exception e){
+                                            e.printStackTrace();
+                                        }
 
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
 
                         }
                     }
@@ -170,6 +188,9 @@ public class AdminViewHotelOrderFragment extends Fragment {
 
                 }
             });
+
+
+
 
 
             btn_back_viewHotelOrder.setOnClickListener(new View.OnClickListener() {
@@ -201,6 +222,8 @@ public class AdminViewHotelOrderFragment extends Fragment {
             });
 
 
+
+
             btn_invoice_print.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -211,6 +234,9 @@ public class AdminViewHotelOrderFragment extends Fragment {
 
 
             getAllOrders();
+
+
+
 
         } catch (Exception e) {
             Toast.makeText(Vendor.getAppContext(), "On Create: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -342,6 +368,8 @@ public class AdminViewHotelOrderFragment extends Fragment {
 
                     addNewItemLeftRight(document, "Hotel Name: ", " " + hotelName, orderNumberFont);
                     addNewItemLeftRight(document, "Phone Number: ", " " + phoneNumber, orderNumberFont);
+                    addNewItemLeftRight(document, "Address: ", " " + address, orderNumberFont);
+
 
 
                     //Add product order detail

@@ -15,11 +15,7 @@ import com.example.vendor.MyOrderData;
 import com.example.vendor.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.ml.common.modeldownload.FirebaseModelDownloadConditions;
-import com.google.firebase.ml.naturallanguage.FirebaseNaturalLanguage;
-import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslateLanguage;
-import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslator;
-import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslatorOptions;
+
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -54,6 +50,7 @@ public class AdapetMyOrderGuest extends RecyclerView.Adapter<AdapetMyOrderGuest.
         String itemGms = cartData.getItemGms();
         String itemQuantity = cartData.getItemQuantity();
         String itemUnit = cartData.getItemUnit();
+        String itemMarathi = cartData.getItemNameInMarathi();
 
         holder.txt_itemPrice.setText("Rs "+itemFinalPrice);
         try {
@@ -112,43 +109,7 @@ public class AdapetMyOrderGuest extends RecyclerView.Adapter<AdapetMyOrderGuest.
         }
 
 
-        // Create an English-German translator:
-
-        FirebaseTranslatorOptions firebaseTranslatorOptions = new FirebaseTranslatorOptions.Builder()
-                .setSourceLanguage(FirebaseTranslateLanguage.EN)
-                .setTargetLanguage(FirebaseTranslateLanguage.MR)
-                .build();
-
-        final FirebaseTranslator firebaseTranslator = FirebaseNaturalLanguage.getInstance().getTranslator(firebaseTranslatorOptions);
-
-        FirebaseModelDownloadConditions firebaseModelDownloadConditions = new FirebaseModelDownloadConditions.Builder().build();
-
-        firebaseTranslator.downloadModelIfNeeded(firebaseModelDownloadConditions)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        holder.txt_itemCartNameInMarathiGuest.setText("Model downloaded");
-                        firebaseTranslator.translate(itemName)
-                                .addOnSuccessListener(new OnSuccessListener<String>() {
-                                    @Override
-                                    public void onSuccess(String s) {
-                                        holder.txt_itemCartNameInMarathiGuest.setText(s);
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        holder.txt_itemCartNameInMarathiGuest.setText(e.getMessage());
-                                    }
-                                });
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        holder.txt_itemCartNameInMarathiGuest.setText("Download failed");
-                    }
-                });
+        holder.txt_itemCartNameInMarathiGuest.setText(itemMarathi);
 
 
     }

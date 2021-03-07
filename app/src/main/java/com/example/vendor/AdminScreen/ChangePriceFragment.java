@@ -2,7 +2,11 @@ package com.example.vendor.AdminScreen;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -27,19 +31,33 @@ import android.widget.Toast;
 import com.example.vendor.R;
 import com.example.vendor.UserScreens.HomeFragment;
 import com.example.vendor.Vendor;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.ml.common.modeldownload.FirebaseModelDownloadConditions;
-import com.google.firebase.ml.naturallanguage.FirebaseNaturalLanguage;
-import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslateLanguage;
-import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslator;
-import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslatorOptions;
+
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+import id.zelory.compressor.Compressor;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -53,9 +71,11 @@ public class ChangePriceFragment extends Fragment {
 
     DatabaseReference db_chnage_price;
 
+    String key = "";
+
     Button btn_cat_gold, btn_cat_silver, btn_cat_bronnze, btn_cat_fix, btn_cat_guest;
-    TextView txt_currentPrice, txt_name_in_marathi;
-    EditText edt_change_priceGold, edt_change_item_name, edt_change_priceSilver, edt_change_priceBronze, edt_change_priceFix, edt_change_priceGuest;
+    TextView txt_currentPrice;
+    EditText edt_change_priceGold, txt_name_in_marathi, edt_change_item_name, edt_change_priceSilver, edt_change_priceBronze, edt_change_priceFix, edt_change_priceGuest;
     RelativeLayout rl_price;
 
     String gold_price = "0", silver_price = "0", bronze_price = "0", fix_price = "0", guest_price = "0";
@@ -65,6 +85,18 @@ public class ChangePriceFragment extends Fragment {
     ProgressDialog mProgress;
 
     ImageButton btn_back_change_price;
+    CircleImageView img_change_price;
+
+    static int Gallery_pick = 1;
+
+    Bitmap thumb_bitmap;
+
+    byte[] thumb_bite = {};
+    Context context;
+
+    String imageUrl = null
+            ;
+    StorageReference mStoragePath;
 
 
     @Override
@@ -89,6 +121,7 @@ public class ChangePriceFragment extends Fragment {
             txt_name_in_marathi = view.findViewById(R.id.txt_name_in_marathi);
             edt_change_item_name = view.findViewById(R.id.txt_itemName_change_price);
             btn_back_change_price = view.findViewById(R.id.btn_back_change_price);
+            img_change_price = view.findViewById(R.id.img_change_price);
 
             Bundle bundle = getArguments();
 
@@ -104,7 +137,20 @@ public class ChangePriceFragment extends Fragment {
 
             db_chnage_price = FirebaseDatabase.getInstance().getReference().child("mart");
 
+            mStoragePath = FirebaseStorage.getInstance().getReference();
 
+            img_change_price.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent galleryIntent = new Intent();
+                    galleryIntent.setType("image/*");
+                    galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+
+
+
+                    startActivityForResult(Intent.createChooser(galleryIntent, "Select Image"), Gallery_pick);
+                }
+            });
             btn_back_change_price.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -118,43 +164,41 @@ public class ChangePriceFragment extends Fragment {
             mProgress.setMessage("updating the prices");
 
             edt_change_item_name.setText("" + itemName);
-            // Create an English-German translator:
 
-            FirebaseTranslatorOptions firebaseTranslatorOptions = new FirebaseTranslatorOptions.Builder()
-                    .setSourceLanguage(FirebaseTranslateLanguage.EN)
-                    .setTargetLanguage(FirebaseTranslateLanguage.MR)
-                    .build();
 
-            final FirebaseTranslator firebaseTranslator = FirebaseNaturalLanguage.getInstance().getTranslator(firebaseTranslatorOptions);
 
-            FirebaseModelDownloadConditions firebaseModelDownloadConditions = new FirebaseModelDownloadConditions.Builder().build();
 
-            firebaseTranslator.downloadModelIfNeeded(firebaseModelDownloadConditions)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            txt_name_in_marathi.setText("Model downloaded");
-                            firebaseTranslator.translate(itemName)
-                                    .addOnSuccessListener(new OnSuccessListener<String>() {
-                                        @Override
-                                        public void onSuccess(String s) {
-                                            txt_name_in_marathi.setText(s);
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            txt_name_in_marathi.setText(e.getMessage());
-                                        }
-                                    });
+                db_chnage_price.child(itemCategory).orderByChild("itemName").equalTo(storeName).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(snapshot.hasChildren()){
+                            for(DataSnapshot ds : snapshot.getChildren()){
+                                try {
+                                    String marathi_name = ds.child("itemNameInMarathi").getValue().toString();
+                                    String item_Image = ds.child("itemImage").getValue().toString();
+
+                                    Picasso.with(getContext()).load(item_Image).placeholder(R.drawable.ic_cart_blue).into(img_change_price);
+
+                                    Log.v("itemNameInMarathi",""+marathi_name);
+                                    txt_name_in_marathi.setText(""+marathi_name);
+                                }catch (Exception e){
+                                    Log.v("marathi",""+e.getMessage());
+                                }
+
+                            }
+
                         }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            txt_name_in_marathi.setText("Download failed");
-                        }
-                    });
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+
+
+
 
 
             change_gold_price();
@@ -171,41 +215,7 @@ public class ChangePriceFragment extends Fragment {
                     itemName = charSequence.toString();
                     // Create an English-German translator:
 
-                    FirebaseTranslatorOptions firebaseTranslatorOptions = new FirebaseTranslatorOptions.Builder()
-                            .setSourceLanguage(FirebaseTranslateLanguage.EN)
-                            .setTargetLanguage(FirebaseTranslateLanguage.MR)
-                            .build();
 
-                    final FirebaseTranslator firebaseTranslator = FirebaseNaturalLanguage.getInstance().getTranslator(firebaseTranslatorOptions);
-
-                    FirebaseModelDownloadConditions firebaseModelDownloadConditions = new FirebaseModelDownloadConditions.Builder().build();
-
-                    firebaseTranslator.downloadModelIfNeeded(firebaseModelDownloadConditions)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    txt_name_in_marathi.setText("Model downloaded");
-                                    firebaseTranslator.translate(itemName)
-                                            .addOnSuccessListener(new OnSuccessListener<String>() {
-                                                @Override
-                                                public void onSuccess(String s) {
-                                                    txt_name_in_marathi.setText(s);
-                                                }
-                                            })
-                                            .addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    txt_name_in_marathi.setText(e.getMessage());
-                                                }
-                                            });
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    txt_name_in_marathi.setText("Download failed");
-                                }
-                            });
 
                 }
 
@@ -357,16 +367,42 @@ public class ChangePriceFragment extends Fragment {
                     db_chnage_price.child(itemCategory).orderByChild("itemName").equalTo(storeName).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            String key = "";
+
                             if (snapshot.hasChildren()) {
                                 for (DataSnapshot ds : snapshot.getChildren()) {
                                     key = ds.getKey();
                                 }
 
                                 final String finalKey = key;
+                                final StorageReference thumb_filepath = mStoragePath.child("/" + itemCategory).child(edt_change_item_name.getText().toString() + ".jpg");
+
+                                try {
+                                    UploadTask uploadTask = thumb_filepath.putBytes(thumb_bite);
+                                    uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                        @Override
+                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                            thumb_filepath.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Uri> task) {
+                                                    imageUrl = task.getResult().toString();
+                                                    Map images = new HashMap<>();
+
+                                                    images.put("itemImage", imageUrl);
+
+                                                    db_chnage_price.child(itemCategory).child(key).child("itemImage").setValue(imageUrl);
+                                                }
+                                            });
+                                        }
+                                    });
+
+                                }catch (Exception e){
+
+                                }
+
 
                                 db_chnage_price.child(itemCategory).child(key).child("itemName").setValue(edt_change_item_name.getText().toString());
 
+                                db_chnage_price.child(itemCategory).child(key).child("itemNameInMarathi").setValue(txt_name_in_marathi.getText().toString());
 
                                 if (!gold_price.equals("0")) {
                                     db_chnage_price.child(itemCategory).child(key).child("itemPriceInGold").setValue(gold_price).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -782,6 +818,54 @@ public class ChangePriceFragment extends Fragment {
         edt_change_priceFix.setVisibility(View.INVISIBLE);
         edt_change_priceSilver.setVisibility(View.INVISIBLE);
         edt_change_priceGuest.setVisibility(View.VISIBLE);
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        try {
+            if (requestCode == Gallery_pick && resultCode == RESULT_OK) {
+
+                Uri ImageUri = data.getData();
+                CropImage.activity(ImageUri)
+                        .setAspectRatio(1, 1)
+                        .start(getContext(), this);
+
+
+            }
+            //Toast.makeText(getContext(),String.valueOf(CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) , Toast.LENGTH_SHORT).show();
+            if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+                CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                if (resultCode == RESULT_OK) {
+
+
+                    Uri resultUri = result.getUri();
+
+                    File thum_file = new File(resultUri.getPath());
+
+                    //Toast.makeText(getContext(), "cropImage2", Toast.LENGTH_SHORT).show();
+
+
+                    thumb_bitmap = null;
+                    try {
+                        thumb_bitmap = new Compressor(getContext()).setMaxHeight(200).setMaxWidth(200).setQuality(75).compressToBitmap(thum_file);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    thumb_bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    thumb_bite = baos.toByteArray();
+
+                    Picasso.with(getContext()).load(thum_file).placeholder(R.drawable.ic_cart_blue).into(img_change_price);
+
+
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 

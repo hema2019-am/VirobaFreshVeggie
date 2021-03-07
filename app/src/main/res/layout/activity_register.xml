@@ -90,12 +90,32 @@
 
 
 
+        <EditText
+            android:id="@+id/edt_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/edt_hotelName"
+            android:layout_marginStart="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:background="@drawable/shape_rect01"
+            android:drawableStart="@drawable/ic_store_blue"
+            android:drawableLeft="@drawable/ic_store_blue"
+            android:drawablePadding="@dimen/_5sdp"
+            android:fontFamily="@font/acumin_rpro"
+            android:hint="Address"
+            android:inputType="text"
+            android:padding="@dimen/_10sdp"
+            android:textColorHint="@color/textColorHint" />
+
+
+
 
         <EditText
             android:id="@+id/edt_register_Password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/edt_hotelName"
+            android:layout_below="@id/edt_address"
             android:layout_marginStart="@dimen/_15sdp"
             android:layout_marginTop="@dimen/_12sdp"
             android:layout_marginEnd="@dimen/_15sdp"

@@ -98,6 +98,7 @@ public class AdminAddItemsFragment extends Fragment {
     EditText edt_name_english, edt_name_hindi, edt_price;
     TextView txt_quantity, txt_category;
     ImageView img_quntity, img_category;
+    String itemNameInMarathi;
     RelativeLayout rl_add;
 
     String itemNameInEnglish, itemPrice, itemCategory;
@@ -117,6 +118,8 @@ public class AdminAddItemsFragment extends Fragment {
     ProgressDialog mProgress;
 
     String itemQuantityType  = "";
+
+    EditText edt_addItemNameInMarathi;
 
     EditText edt_price_kgs_gold, edt_price_gms_gold, edt_price_pcs_gold, edt_price_kgs_silver, edt_price_gms_silver, edt_price_pcs_silver;
     EditText edt_price_kgs_bronze, edt_price_gms_bronze, edt_price_pcs_bronze, edt_price_kgs_fix, edt_price_gms_fix, edt_price_pcs_fix;
@@ -155,6 +158,7 @@ public class AdminAddItemsFragment extends Fragment {
         txt_category = view.findViewById(R.id.txt_addItemCategory);
         img_quntity = view.findViewById(R.id.img_add_quantity_type);
         img_category = view.findViewById(R.id.img_add_category);
+        edt_addItemNameInMarathi = view.findViewById(R.id.edt_addItemNameInMarathi);
         rl_add = view.findViewById(R.id.btn_add_item);
 
         edt_price_kgs_gold = view.findViewById(R.id.edt_addItemPriceInKgsGold);
@@ -739,9 +743,10 @@ public class AdminAddItemsFragment extends Fragment {
 
 
         itemNameInEnglish = edt_name_english.getText().toString().trim();
+        itemNameInMarathi = edt_addItemNameInMarathi.getText().toString().trim();
 
 
-        if (itemNameInEnglish == null  && itemCategory == null && itemQuantityType == null) {
+        if (itemNameInEnglish == null  && itemCategory == null && itemQuantityType == null && itemNameInMarathi == null ) {
             mProgress.hide();
             Toast.makeText(Vendor.getAppContext(), "empty fields", Toast.LENGTH_SHORT).show();
             return;
@@ -784,7 +789,7 @@ public class AdminAddItemsFragment extends Fragment {
             }
 
             addData.put("itemName", itemNameInEnglish);
-
+            addData.put("itemNameInMarathi",itemNameInMarathi);
             addData.put("itemUnit", itemQuantityType);
             addData.put("itemPriceInGold",priceGold);
             addData.put("itemPriceInSilver",priceSilver);
@@ -840,6 +845,7 @@ public class AdminAddItemsFragment extends Fragment {
                                                     edt_price_kgs_gold.setText("");
                                                     edt_price_kgs_fix.setText("");
                                                     edt_price_kgs_guest.setText("");
+                                                    edt_addItemNameInMarathi.setText("");
 
                                                     edt_price_pcs_bronze.setText("");
                                                     edt_price_pcs_gold.setText("");

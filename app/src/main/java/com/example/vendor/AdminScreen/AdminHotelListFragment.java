@@ -18,11 +18,6 @@ import com.example.vendor.UserScreens.categoriesItemFragment;
 import com.example.vendor.Vendor;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.ml.common.modeldownload.FirebaseModelDownloadConditions;
-import com.google.firebase.ml.naturallanguage.FirebaseNaturalLanguage;
-import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslateLanguage;
-import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslator;
-import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslatorOptions;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,35 +54,22 @@ public class AdminHotelListFragment extends Fragment {
 
 
 
-            // Create an English-German translator:
 
-            FirebaseTranslatorOptions firebaseTranslatorOptions = new FirebaseTranslatorOptions.Builder()
-                    .setSourceLanguage(FirebaseTranslateLanguage.EN)
-                    .setTargetLanguage(FirebaseTranslateLanguage.MR)
-                    .build();
-
-            final FirebaseTranslator firebaseTranslator = FirebaseNaturalLanguage.getInstance().getTranslator(firebaseTranslatorOptions);
-
-            FirebaseModelDownloadConditions firebaseModelDownloadConditions = new FirebaseModelDownloadConditions.Builder().build();
-
-            firebaseTranslator.downloadModelIfNeeded(firebaseModelDownloadConditions)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-
-                        }
-                    });
 
             rl_add_User.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    AddUserFragment ldf = new AddUserFragment ();
 
+                    FragmentTransaction transection=getFragmentManager().beginTransaction();
+
+
+
+
+
+                    transection.replace(R.id.fragment_Admin_container, ldf);
+                    transection.addToBackStack(null);
+                    transection.commit();
                 }
             });
             rl_guest.setOnClickListener(new View.OnClickListener() {

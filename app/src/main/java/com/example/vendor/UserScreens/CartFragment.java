@@ -383,6 +383,7 @@ public class CartFragment extends Fragment {
                     String itemFinalCost = cartDataArrayList.get(i).getItem_Final_Cost();
                     final String itemUnit = cartDataArrayList.get(i).getItem_Unit();
                     String imageItem = cartDataArrayList.get(i).getItem_Image();
+                    String itemInMarathi = cartDataArrayList.get(i).getItem_Marathi();
 
                     itemGm = cartDataArrayList.get(i).getItem_Gms();
 
@@ -393,6 +394,7 @@ public class CartFragment extends Fragment {
                     hashMap.put("itemFinalPrice", itemFinalCost);
                     hashMap.put("itemGms", itemGm);
                     hashMap.put("itemImage", imageItem);
+                    hashMap.put("itemNameInMarathi",itemInMarathi);
 
 
                     orderContet.child(HotelName).child(Integer.toString(currentOrderNumber)).child(itemName).updateChildren(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -406,7 +408,7 @@ public class CartFragment extends Fragment {
                 }
 
                 EasyDB easyDB = EasyDB.init(getContext(), "ITEM_DB")
-                        .setTableName("ITEMS_TABLE")
+                        .setTableName("ITEMS_TABLES")
                         .addColumn(new Column("Item_Name", new String[]{"text", "unique"}))
                         .addColumn(new Column("Item_Price", new String[]{"text", "not null"}))
                         .addColumn(new Column("Item_Final_Cost", new String[]{"text", "not null"}))
@@ -414,6 +416,7 @@ public class CartFragment extends Fragment {
                         .addColumn(new Column("Item_Unit", new String[]{"text", "not null"}))
                         .addColumn(new Column("Item_Image", new String[]{"text", "not null"}))
                         .addColumn(new Column("Item_Gms", new String[]{"text", "not null"}))
+                        .addColumn(new Column("Item_Marathi", new String[]{"text", "not null"}))
                         .doneTableColumn();
 
                 Toast.makeText(Vendor.getAppContext(), "Order Placed", Toast.LENGTH_SHORT).show();
@@ -578,6 +581,8 @@ public class CartFragment extends Fragment {
                     String itemUnit = cartDataArrayListGuest.get(i).getItem_Unit();
                     String itemGm = cartDataArrayListGuest.get(i).getItem_Gms();
                     String imageItem = cartDataArrayListGuest.get(i).getItem_Image();
+                    String itemMarathi = cartDataArrayListGuest.get(i).getItem_Marathi();
+
                     HashMap<String, Object> hashMap = new HashMap<>();
                     hashMap.put("itemName", itemName);
                     hashMap.put("itemQuantity", itemQuantity);
@@ -585,6 +590,8 @@ public class CartFragment extends Fragment {
                     hashMap.put("itemFinalPrice", itemFinalCost);
                     hashMap.put("itemGms", itemGm);
                     hashMap.put("itemImage", imageItem);
+                    hashMap.put("itemNameInMarathi",itemMarathi);
+
 
 
                     orderContet.child(HotelName).child(Integer.toString(currentOrderNumber)).child(itemName).updateChildren(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -599,7 +606,7 @@ public class CartFragment extends Fragment {
                 }
 
                 EasyDB easyDB = EasyDB.init(getContext(), "ITEM_GUEST_DB")
-                        .setTableName("ITEMS_GUEST_TABLE")
+                        .setTableName("ITEMS_GUEST_TABLES")
                         .addColumn(new Column("Item_Name", new String[]{"text", "unique"}))
                         .addColumn(new Column("Item_Price", new String[]{"text", "not null"}))
                         .addColumn(new Column("Item_Final_Cost", new String[]{"text", "not null"}))
@@ -607,6 +614,7 @@ public class CartFragment extends Fragment {
                         .addColumn(new Column("Item_Unit", new String[]{"text", "not null"}))
                         .addColumn(new Column("Item_Image", new String[]{"text", "not null"}))
                         .addColumn(new Column("Item_Gms", new String[]{"text", "not null"}))
+                        .addColumn(new Column("Item_Marathi", new String[]{"text", "not null"}))
                         .doneTableColumn();
 
                 Toast.makeText(Vendor.getAppContext(), "Order Placed", Toast.LENGTH_SHORT).show();
@@ -919,7 +927,7 @@ public class CartFragment extends Fragment {
                     return;
                 }
                 EasyDB easyDB = EasyDB.init(getContext(), "ITEM_DB")
-                        .setTableName("ITEMS_TABLE")
+                        .setTableName("ITEMS_TABLES")
                         .addColumn(new Column("Item_Name", new String[]{"text", "unique"}))
                         .addColumn(new Column("Item_Price", new String[]{"text", "not null"}))
                         .addColumn(new Column("Item_Final_Cost", new String[]{"text", "not null"}))
@@ -927,6 +935,7 @@ public class CartFragment extends Fragment {
                         .addColumn(new Column("Item_Unit", new String[]{"text", "not null"}))
                         .addColumn(new Column("Item_Image", new String[]{"text", "not null"}))
                         .addColumn(new Column("Item_Gms", new String[]{"text", "not null"}))
+                        .addColumn(new Column("Item_Marathi", new String[]{"text", "not null"}))
                         .doneTableColumn();
 
 
@@ -953,7 +962,7 @@ public class CartFragment extends Fragment {
 
                 }
                 EasyDB easyDB = EasyDB.init(getContext(), "ITEM_GUEST_DB")
-                        .setTableName("ITEMS_GUEST_TABLE")
+                        .setTableName("ITEMS_GUEST_TABLES")
                         .addColumn(new Column("Item_Name", new String[]{"text", "unique"}))
                         .addColumn(new Column("Item_Price", new String[]{"text", "not null"}))
                         .addColumn(new Column("Item_Final_Cost", new String[]{"text", "not null"}))
@@ -961,6 +970,7 @@ public class CartFragment extends Fragment {
                         .addColumn(new Column("Item_Unit", new String[]{"text", "not null"}))
                         .addColumn(new Column("Item_Image", new String[]{"text", "not null"}))
                         .addColumn(new Column("Item_Gms", new String[]{"text", "not null"}))
+                        .addColumn(new Column("Item_Marathi", new String[]{"text", "not null"}))
                         .doneTableColumn();
 
 
@@ -1003,7 +1013,7 @@ public class CartFragment extends Fragment {
                 txt_total.setVisibility(View.INVISIBLE);
 
                 EasyDB easyDB = EasyDB.init(getContext(), "ITEM_DB")
-                        .setTableName("ITEMS_TABLE")
+                        .setTableName("ITEMS_TABLES")
                         .addColumn(new Column("Item_Name", new String[]{"text", "unique"}))
                         .addColumn(new Column("Item_Price", new String[]{"text", "not null"}))
                         .addColumn(new Column("Item_Final_Cost", new String[]{"text", "not null"}))
@@ -1011,6 +1021,7 @@ public class CartFragment extends Fragment {
                         .addColumn(new Column("Item_Unit", new String[]{"text", "not null"}))
                         .addColumn(new Column("Item_Image", new String[]{"text", "not null"}))
                         .addColumn(new Column("Item_Gms", new String[]{"text", "not null"}))
+                        .addColumn(new Column("Item_Marathi", new String[]{"text", "not null"}))
                         .doneTableColumn();
 
                 Cursor res = easyDB.getAllData();
@@ -1022,6 +1033,7 @@ public class CartFragment extends Fragment {
                     String itemUnit = res.getString(5);
                     String itemImage = res.getString(6);
                     String itemGms = res.getString(7);
+                    String itemMarathi = res.getString(8);
 
                     TotalPrice = TotalPrice + Double.parseDouble(itemFinalCost);
 
@@ -1032,6 +1044,7 @@ public class CartFragment extends Fragment {
                             , "" + itemUnit
                             , "" + itemImage
                             , "" + itemGms
+                            , "" + itemMarathi
                     );
 
                     cartDataArrayList.add(cartData);
@@ -1046,7 +1059,7 @@ public class CartFragment extends Fragment {
 
 
                 EasyDB easyDB = EasyDB.init(getContext(), "ITEM_GUEST_DB")
-                        .setTableName("ITEMS_GUEST_TABLE")
+                        .setTableName("ITEMS_GUEST_TABLES")
                         .addColumn(new Column("Item_Name", new String[]{"text", "unique"}))
                         .addColumn(new Column("Item_Price", new String[]{"text", "not null"}))
                         .addColumn(new Column("Item_Final_Cost", new String[]{"text", "not null"}))
@@ -1054,6 +1067,7 @@ public class CartFragment extends Fragment {
                         .addColumn(new Column("Item_Unit", new String[]{"text", "not null"}))
                         .addColumn(new Column("Item_Image", new String[]{"text", "not null"}))
                         .addColumn(new Column("Item_Gms", new String[]{"text", "not null"}))
+                        .addColumn(new Column("Item_Marathi", new String[]{"text", "not null"}))
                         .doneTableColumn();
 
                 Cursor res = easyDB.getAllData();
@@ -1065,6 +1079,7 @@ public class CartFragment extends Fragment {
                     String itemUnit = res.getString(5);
                     String itemImage = res.getString(6);
                     String itemGms = res.getString(7);
+                    String itemMarathi = res.getString(8);
 
                     TotalPrice = TotalPrice + Double.parseDouble(itemFinalCost);
 
@@ -1075,6 +1090,7 @@ public class CartFragment extends Fragment {
                             , "" + itemUnit
                             , "" + itemImage
                             , "" + itemGms
+                            , "" + itemMarathi
                     );
 
                     cartDataArrayListGuest.add(cartData);

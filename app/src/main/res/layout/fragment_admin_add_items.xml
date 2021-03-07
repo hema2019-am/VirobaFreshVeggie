@@ -78,13 +78,32 @@
                 android:textColorHint="@color/textColorHint" />
 
 
+            <EditText
+                android:id="@+id/edt_addItemNameInMarathi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_15sdp"
+                android:background="@drawable/shape_rect01"
+                android:drawableStart="@drawable/ic_edit_blue"
+                android:drawableLeft="@drawable/ic_edit_blue"
+                android:drawablePadding="@dimen/_5sdp"
+                android:fontFamily="@font/acumin_rpro"
+                android:layout_below="@id/edt_addItemNameInEnglish"
+                android:hint="Add Name in Marathi"
+                android:inputType="text"
+                android:padding="@dimen/_10sdp"
+                android:textColorHint="@color/textColorHint" />
+
+
 
 
             <TextView
                 android:id="@+id/txt_addItemQuantity"
                 android:layout_width="@dimen/_200sdp"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/edt_addItemNameInEnglish"
+                android:layout_below="@id/edt_addItemNameInMarathi"
                 android:layout_marginStart="@dimen/_15sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_15sdp"
@@ -101,7 +120,7 @@
                 android:id="@+id/img_add_quantity_type"
                 android:layout_width="@dimen/_30sdp"
                 android:layout_height="@dimen/_30sdp"
-                android:layout_below="@id/edt_addItemNameInEnglish"
+                android:layout_below="@id/edt_addItemNameInMarathi"
                 android:layout_marginTop="@dimen/_15sdp"
                 android:layout_toRightOf="@id/txt_addItemQuantity"
                 android:src="@drawable/ic_arrow_drop_down_gray" />

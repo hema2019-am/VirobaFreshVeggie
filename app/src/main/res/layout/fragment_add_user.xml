@@ -46,9 +46,9 @@
             android:drawableLeft="@drawable/ic_person_blue"
             android:drawablePadding="@dimen/_5sdp"
             android:fontFamily="@font/acumin_rpro"
-            android:hint="Full Name"
-            android:inputType="text"
             android:padding="@dimen/_10sdp"
+            android:inputType="text"
+            android:hint="Full Name"
             android:textColorHint="@color/textColorHint" />
 
         <EditText
@@ -69,31 +69,55 @@
             android:padding="@dimen/_10sdp"
             android:textColorHint="@color/textColorHint" />
 
-
-
-        <EditText
-            android:id="@+id/edt_hotelName_add"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/linear"
             android:layout_below="@id/edt_add_Phone"
-            android:layout_marginStart="@dimen/_15sdp"
-            android:layout_marginTop="@dimen/_12sdp"
-            android:layout_marginEnd="@dimen/_15sdp"
-            android:background="@drawable/shape_rect01"
-            android:drawableStart="@drawable/ic_store_blue"
-            android:drawableLeft="@drawable/ic_store_blue"
-            android:drawablePadding="@dimen/_5sdp"
-            android:fontFamily="@font/acumin_rpro"
-            android:hint="Hotel Name"
-            android:inputType="text"
-            android:padding="@dimen/_10sdp"
-            android:textColorHint="@color/textColorHint" />
+            android:weightSum="6"
+            >
+
+            <TextView
+                android:id="@+id/edt_hotelName_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:layout_marginEnd="@dimen/_15sdp"
+                android:background="@drawable/shape_rect01"
+                android:drawableStart="@drawable/ic_store_blue"
+                android:drawableLeft="@drawable/ic_store_blue"
+                android:drawablePadding="@dimen/_5sdp"
+                android:fontFamily="@font/acumin_rpro"
+                 android:text="Hotel Name"
+                android:padding="@dimen/_10sdp"
+                android:textColorHint="@color/textColorHint" />
+
+            <ImageButton
+                android:id="@+id/img_select_hotel"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_weight="1"
+                android:src="@drawable/ic_arrow_drop_down_gray"
+                android:background="@null"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="@dimen/_10sdp"
+               />
+
+
+        </LinearLayout>
+
+
+
+
 
         <EditText
             android:id="@+id/edt_hotelName_add_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/edt_hotelName_add"
+            android:layout_below="@id/linear"
             android:layout_marginStart="@dimen/_15sdp"
             android:layout_marginTop="@dimen/_12sdp"
             android:layout_marginEnd="@dimen/_15sdp"

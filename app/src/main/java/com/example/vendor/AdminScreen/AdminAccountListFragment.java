@@ -51,10 +51,9 @@ public class AdminAccountListFragment extends Fragment {
             btn_viewOrderHotel_back.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                   HotelListFragment ldf = new HotelListFragment();
-                    FragmentTransaction transection=getFragmentManager().beginTransaction();
-                    transection.replace(R.id.fragment_Admin_container, ldf);
-                    transection.commit();
+                    if (getFragmentManager().getBackStackEntryCount() > 0) {
+                        getFragmentManager().popBackStack();
+                    }
                 }
             });
         }catch (Exception e){

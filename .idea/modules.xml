@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/VirobaFreshVeggie.iml" filepath="$PROJECT_DIR$/VirobaFreshVeggie.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/biroba.iml" filepath="$PROJECT_DIR$/biroba.iml" />
     </modules>
   </component>
 </project>

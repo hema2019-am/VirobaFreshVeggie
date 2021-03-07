@@ -95,6 +95,7 @@ public class HotelListFragment extends Fragment {
                 protected void onBindViewHolder(@NonNull final HolderHotelName holder, int position, @NonNull final HotelNameContsnats model) {
                     // Toast.makeText(getContext(), model.getHotelName(), Toast.LENGTH_SHORT).show();
 
+                    holder.txt_HotelName.setText(model.getHotelName());
                     holder.view.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

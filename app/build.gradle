@@ -88,15 +88,16 @@ dependencies {
 
     implementation 'com.codemybrainsout.onboarding:onboarder:1.0.4'
 
+    implementation 'org.apache.poi:poi:4.0.0'
+    implementation 'org.apache.poi:poi-ooxml:4.0.0'
+
 
 //    implementation 'org.apache.poi:poi:3.12'
 //    implementation 'org.apache.poi:poi-ooxml:3.12'
 //    implementation 'com.fasterxml:aalto-xml:1.0.0'
 
     implementation 'com.github.smarteist:autoimageslider:1.4.0'
-    implementation 'com.google.firebase:firebase-ml-natural-language:22.0.1'
-    implementation 'com.google.firebase:firebase-ml-natural-language-language-id-model:20.0.8'
-    implementation 'com.google.firebase:firebase-ml-natural-language-translate-model:20.0.9'
+
 
 
     debugImplementation('com.github.ajitsing:sherlock:1.0.4@aar') {

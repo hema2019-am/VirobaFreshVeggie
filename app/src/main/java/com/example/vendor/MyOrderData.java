@@ -2,18 +2,27 @@ package com.example.vendor;
 
 public class MyOrderData {
 
-    String itemFinalPrice, itemGms, itemImage, itemName, itemQuantity, itemUnit;
+    String itemFinalPrice, itemGms, itemImage, itemName, itemQuantity, itemUnit, itemNameInMarathi;
 
-    public MyOrderData(String itemFinalPrice, String itemGms, String itemImage, String itemName, String itemQuantity, String itemUnit) {
+    public MyOrderData(String itemFinalPrice, String itemGms, String itemImage, String itemName, String itemQuantity, String itemUnit, String itemNameInMarathi) {
         this.itemFinalPrice = itemFinalPrice;
         this.itemGms = itemGms;
         this.itemImage = itemImage;
         this.itemName = itemName;
         this.itemQuantity = itemQuantity;
         this.itemUnit = itemUnit;
+        this.itemNameInMarathi =itemNameInMarathi;
     }
 
     public MyOrderData(){}
+
+    public String getItemNameInMarathi() {
+        return itemNameInMarathi;
+    }
+
+    public void setItemNameInMarathi(String itemNameInMarathi) {
+        this.itemNameInMarathi = itemNameInMarathi;
+    }
 
     public String getItemFinalPrice() {
         return itemFinalPrice;

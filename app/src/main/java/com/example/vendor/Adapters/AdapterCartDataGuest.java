@@ -24,13 +24,7 @@ import com.example.vendor.R;
 
 import com.example.vendor.UserScreens.CartFragment;
 import com.example.vendor.UserScreens.EditCartItemFragment;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.ml.common.modeldownload.FirebaseModelDownloadConditions;
-import com.google.firebase.ml.naturallanguage.FirebaseNaturalLanguage;
-import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslateLanguage;
-import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslator;
-import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslatorOptions;
+
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -70,46 +64,10 @@ public class AdapterCartDataGuest extends RecyclerView.Adapter<AdapterCartDataGu
         final String ItemUnit = cartData.getItem_Unit();
         final String ItemImage = cartData.getItem_Image();
         final String ItemGms = cartData.getItem_Gms();
+        String itemMarathi = cartData.getItem_Marathi();
 
 
-        // Create an English-German translator:
-
-        FirebaseTranslatorOptions firebaseTranslatorOptions = new FirebaseTranslatorOptions.Builder()
-                .setSourceLanguage(FirebaseTranslateLanguage.EN)
-                .setTargetLanguage(FirebaseTranslateLanguage.MR)
-                .build();
-
-        final FirebaseTranslator firebaseTranslator = FirebaseNaturalLanguage.getInstance().getTranslator(firebaseTranslatorOptions);
-
-        FirebaseModelDownloadConditions firebaseModelDownloadConditions = new FirebaseModelDownloadConditions.Builder().build();
-
-        firebaseTranslator.downloadModelIfNeeded(firebaseModelDownloadConditions)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        holder.txt_itemCartNameInMarathiGuest.setText("Model downloaded");
-                        firebaseTranslator.translate(title)
-                                .addOnSuccessListener(new OnSuccessListener<String>() {
-                                    @Override
-                                    public void onSuccess(String s) {
-                                        holder.txt_itemCartNameInMarathiGuest.setText(s);
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        holder.txt_itemCartNameInMarathiGuest.setText(e.getMessage());
-                                    }
-                                });
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        holder.txt_itemCartNameInMarathiGuest.setText("Download failed");
-                    }
-                });
-
+        holder.txt_itemCartNameInMarathiGuest.setText(""+itemMarathi);
 
         holder.txtCartItem.setText("" + title);
         holder.txt_itemPrice.setText("Rs "+itemFinalCost);
@@ -206,7 +164,7 @@ public class AdapterCartDataGuest extends RecyclerView.Adapter<AdapterCartDataGu
                                 public void onClick(DialogInterface dialog, int which) {
                                     //delete
                                     EasyDB easyDB = EasyDB.init(context,"ITEM_GUEST_DB")
-                                            .setTableName("ITEMS_GUEST_TABLE")
+                                            .setTableName("ITEMS_GUEST_TABLES")
                                             .addColumn(new Column("Item_Name",new String[] {"text","unique"}))
                                             .addColumn(new Column("Item_Price",new String[] {"text","not null"}))
                                             .addColumn(new Column("Item_Final_Cost",new String[] {"text","not null"}))
@@ -214,6 +172,8 @@ public class AdapterCartDataGuest extends RecyclerView.Adapter<AdapterCartDataGu
                                             .addColumn(new Column("Item_Unit",new String[] {"text","not null"}))
                                             .addColumn(new Column("Item_Image",new String[] {"text","not null"}))
                                             .addColumn(new Column("Item_Gms",new String[] {"text","not null"}))
+                                            .addColumn(new Column("Item_Marathi",new String[] {"text","not null"}))
+
                                             .doneTableColumn();
                                     boolean b = easyDB.deleteRow(1, title);
 

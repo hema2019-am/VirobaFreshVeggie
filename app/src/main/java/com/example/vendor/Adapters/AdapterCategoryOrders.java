@@ -69,6 +69,7 @@ public class AdapterCategoryOrders extends RecyclerView.Adapter<AdapterCategoryO
                 bundle.putString("orderTime",adminHotelOrder.getOrderTime());
                 bundle.putString("status", adminHotelOrder.getOrderStatus());
                 bundle.putString("total",adminHotelOrder.getTotal_order_amount());
+
                 hotelOrderFragment.setArguments(bundle);
 
                 transection.replace(R.id.fragment_Admin_container, hotelOrderFragment).commit();

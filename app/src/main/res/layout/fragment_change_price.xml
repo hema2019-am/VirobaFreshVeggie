@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".AdminScreen.ChangePriceFragment">
 
@@ -27,6 +28,34 @@
         android:textColor="@color/textColorHint"
         android:textSize="@dimen/_20ssp" />
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/img_change_price"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+
+        android:layout_gravity="center"
+        android:src="@drawable/ic_cart_blue"
+        app:civ_border_color="#2B2B2B"
+        app:civ_border_width="1dp"
+
+
+        />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/img_pencil"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/_minus35sdp"
+        android:layout_marginLeft="@dimen/_40sdp"
+        android:background="@android:color/white"
+        android:src="@drawable/ic_edit_black"
+        app:civ_border_color="#2B2B2B"
+        app:civ_border_width="@dimen/_1sdp"
+
+
+        />
+
 
     <EditText
         android:id="@+id/txt_itemName_change_price"
@@ -36,21 +65,25 @@
         android:background="@drawable/shopping_holder"
         android:inputType="text"
         android:padding="@dimen/_10sdp"
-        android:text="item name: "
+        android:hint="item name: "
+        android:textColorHint="@color/textColorHint"
         android:textColor="@color/textColorHint"
         android:textSize="@dimen/_15ssp" />
 
 
-    <TextView
+
+
+    <EditText
         android:id="@+id/txt_name_in_marathi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/_10sdp"
         android:background="@drawable/shopping_holder"
         android:padding="@dimen/_10sdp"
-        android:text="Item name in Marathi"
+        android:hint="Item name in Marathi"
         android:textColor="@color/textColorHint"
-        android:textSize="@dimen/_15ssp" />
+        android:textSize="@dimen/_15ssp"
+        android:textColorHint="@color/textColorHint"/>
 
 
     <ScrollView

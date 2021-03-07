@@ -43,7 +43,7 @@ public class UserAuthenticationActivity extends AppCompatActivity {
    RelativeLayout btn_register;
 
     String otp;
-    String phoneUid, emailUid;
+    String phoneUid, emailUid, userAdress;
     FirebaseAuth mAuth;
     DatabaseReference mRef;
 
@@ -82,6 +82,8 @@ public class UserAuthenticationActivity extends AppCompatActivity {
             password = getIntent().getStringExtra("password");
             hotelName = getIntent().getStringExtra("hotelName");
             userType = getIntent().getStringExtra("userType");
+
+            userAdress = getIntent().getStringExtra("address");
 
 
             mProgress = new ProgressDialog(this);
@@ -199,6 +201,7 @@ public class UserAuthenticationActivity extends AppCompatActivity {
                     users.put("UserPassword", password);
                     users.put("image","");
                     users.put("UserType",userType);
+                    users.put("UserAddress",userAdress);
 
 
                     mRef.setValue(users).addOnCompleteListener(new OnCompleteListener<Void>() {

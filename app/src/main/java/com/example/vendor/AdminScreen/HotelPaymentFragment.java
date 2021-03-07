@@ -45,6 +45,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -360,7 +361,7 @@ public class HotelPaymentFragment extends Fragment {
                            String date = logData.getDate();
                            String amount = logData.getAmount();
 
-                            sb_1.append(date+" - Rs"+amount);
+                            sb_1.append(date+" - Rs. "+amount);
                             sb_1.append("\n");
                            Log.v("LogDate",""+date);
                        }
@@ -406,12 +407,21 @@ public class HotelPaymentFragment extends Fragment {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;
-                String date = year + "." + monthInStringTo + "." + day;
-                currentDate = date;
-                today = date.replace(".", "");
+                String date = year + "." +monthInStringTo + "." + day;
+                Date sdf = null;
+                try {
+                    sdf = new SimpleDateFormat("yyyy.MMM.dd").parse(date);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                DateFormat dateFormat = new SimpleDateFormat("yyyy.MMM.dd");
+                String strDate = dateFormat.format(sdf);
+                currentDate = strDate;
+
+                today =  strDate.replace(".", "");
 
 
-                txt_date_picker_to.setText("" + date);
+                txt_date_picker_to.setText("" + strDate);
 
             }
         };
@@ -442,11 +452,20 @@ public class HotelPaymentFragment extends Fragment {
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;
                 String date = year + "." + monthInStringFrom + "." + day;
-                currentDate = date;
-                today = date.replace(".", "");
+                Date sdf = null;
+                try {
+                    sdf = new SimpleDateFormat("yyyy.MMM.dd").parse(date);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                DateFormat dateFormat = new SimpleDateFormat("yyyy.MMM.dd");
+                String strDate = dateFormat.format(sdf);
+                currentDate = strDate;
+
+                today =  strDate.replace(".", "");
 
 
-                txt_date_picker_from.setText("" + date);
+                txt_date_picker_from.setText("" + strDate);
 
             }
         };
@@ -501,6 +520,7 @@ public class HotelPaymentFragment extends Fragment {
 
                         Toast.makeText(Vendor.getAppContext(), "Here", Toast.LENGTH_SHORT).show();
                         for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            mProgress.dismiss();
                             String key = ds.getKey();
                             Log.v("keys", "" + key);
                             LogData logDatas = ds.getValue(LogData.class);
@@ -526,6 +546,9 @@ public class HotelPaymentFragment extends Fragment {
 
                         }
 
+                        if(logDataList.size()<=0){
+                            mProgress.dismiss();
+                        }
                         Log.v("Dates",""+logDataList.toString());
                         adapterLogData = new AdapterLogData(getContext(), logDataList);
                         adapterLogData.notifyDataSetChanged();

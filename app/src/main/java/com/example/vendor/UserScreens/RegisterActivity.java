@@ -46,7 +46,7 @@ import java.util.concurrent.TimeUnit;
 public class RegisterActivity extends AppCompatActivity {
 
     ImageButton btn_back, btn_hotelName;
-    EditText edt_reg_fullName, edt_reg_phone, edt_reg_password, edt_reg_confirmPassword, edt_hotelName;
+    EditText edt_reg_fullName, edt_reg_phone, edt_reg_password, edt_reg_confirmPassword, edt_hotelName, edt_adress;
 
   RelativeLayout btn_register;
     TextView txt_signIn, txt_HotelName;
@@ -61,6 +61,7 @@ public class RegisterActivity extends AppCompatActivity {
     public List<String> HotelNames ;
 
     String[] array;
+    String userAdress;
 
 
 
@@ -83,6 +84,8 @@ public class RegisterActivity extends AppCompatActivity {
             edt_hotelName = findViewById(R.id.edt_hotelName);
             btn_register = findViewById(R.id.btn_register);
             txt_signIn = findViewById(R.id.txt_signIn_register);
+
+            edt_adress = findViewById(R.id.edt_address);
 
 
 
@@ -128,12 +131,13 @@ public class RegisterActivity extends AppCompatActivity {
         try {
             fullName = edt_reg_fullName.getText().toString().trim();
             phone = edt_reg_phone.getText().toString().trim();
+         userAdress = edt_adress.getText().toString().trim();
 
             password = edt_reg_password.getText().toString().trim();
             confirmPassword = edt_reg_confirmPassword.getText().toString();
             hotelName = edt_hotelName.getText().toString().trim();
 
-            if(fullName.isEmpty() && phone.isEmpty()  && password.isEmpty() && confirmPassword.isEmpty()){
+            if(fullName.isEmpty() && phone.isEmpty()  && password.isEmpty() && confirmPassword.isEmpty() && userAdress.isEmpty()){
                 Toast.makeText(this, "empty fields", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -241,6 +245,8 @@ public class RegisterActivity extends AppCompatActivity {
                     registerIntent.putExtra("name", fullName);
                     registerIntent.putExtra("hotelName",hotelName);
                     registerIntent.putExtra("phone", phone);
+
+                    registerIntent.putExtra("address",userAdress);
 
                     registerIntent.putExtra("password", password);
                     registerIntent.putExtra("code", s);

@@ -2,7 +2,7 @@ package com.example.vendor;
 
 public class ContentData {
 
-    private String itemName, itemImage, itemPriceInGold, itemPriceInSilver, itemPriceInFix, itemPriceInGuest, itemPriceInBronze, itemCategory, isKgs;
+    private String itemName, itemImage, itemPriceInGold, itemNameInMarathi, itemPriceInSilver, itemPriceInFix, itemPriceInGuest, itemPriceInBronze, itemCategory, isKgs;
 
 
     public ContentData() {
@@ -11,7 +11,7 @@ public class ContentData {
 
 
 
-    public ContentData(String itemName, String itemImage,String itemPriceInGuest,String itemCategory,String itemPriceInFix ,String itemPriceInGold, String itemPriceInSilver, String itemPriceInBronze, String temPriceInFix, String temPriceInGuest, String isKgs) {
+    public ContentData(String itemName, String itemImage,String itemPriceInGuest,String itemCategory,String itemPriceInFix ,String itemPriceInGold, String itemPriceInSilver, String itemPriceInBronze, String temPriceInFix, String temPriceInGuest, String isKgs, String itemNameInMarathi) {
         this.itemName = itemName;
         this.itemImage = itemImage;
         this.itemCategory = itemCategory;
@@ -22,8 +22,16 @@ public class ContentData {
         this.itemPriceInGuest = itemPriceInGuest;
         this.isKgs = isKgs;
 
+        this.itemNameInMarathi = itemNameInMarathi;
     }
 
+    public String getItemNameInMarathi() {
+        return itemNameInMarathi;
+    }
+
+    public void setItemNameInMarathi(String itemNameInMarathi) {
+        this.itemNameInMarathi = itemNameInMarathi;
+    }
 
     public String getItemName() {
         return itemName;

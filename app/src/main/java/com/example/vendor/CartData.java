@@ -5,20 +5,21 @@ package com.example.vendor;
 public class CartData {
 
     //for cart
-    private String Item_Name, Item_Price, Item_Final_Cost, Item_Quantity, Item_Unit, Item_Image, Item_Gms;
+    private String Item_Name, Item_Price, Item_Final_Cost, Item_Quantity, Item_Unit, Item_Image, Item_Gms, Item_Marathi;
 
 
     public CartData(){}
 
-    public CartData(String item_Name, String item_Quantity, String item_Unit , String item_Gms, String item_Final_Cost){
+    public CartData(String item_Name, String item_Quantity, String item_Unit , String item_Gms, String item_Final_Cost ){
         Item_Name = item_Name;
         Item_Quantity = item_Quantity;
         Item_Unit = item_Unit;
         Item_Gms = item_Gms;
         Item_Final_Cost = item_Final_Cost;
 
+
     }
-    public CartData(String item_Name, String item_Price, String item_Final_Cost, String item_Quantity, String item_Unit, String item_Image, String itemGms) {
+    public CartData(String item_Name, String item_Price, String item_Final_Cost, String item_Quantity, String item_Unit, String item_Image, String itemGms, String item_Marathi) {
         Item_Name = item_Name;
         Item_Price = item_Price;
         Item_Final_Cost = item_Final_Cost;
@@ -26,8 +27,16 @@ public class CartData {
         Item_Unit = item_Unit;
         Item_Image = item_Image;
         Item_Gms = itemGms;
+        Item_Marathi = item_Marathi;
     }
 
+    public String getItem_Marathi() {
+        return Item_Marathi;
+    }
+
+    public void setItem_Marathi(String item_Marathi) {
+        Item_Marathi = item_Marathi;
+    }
 
     public String getItem_Gms() {
         return Item_Gms;
